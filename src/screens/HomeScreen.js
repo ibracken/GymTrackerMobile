@@ -7,7 +7,7 @@ const HomeScreen = ({ navigation }) => {
   return (
     <View>
       <Button
-        title="Go to Jane's profile"
+        title="Go to a profile"
         onPress={() => navigation.navigate('Profile', { name: 'Jane' })}
       />
       <LogoutButton />
