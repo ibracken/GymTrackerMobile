@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Alert, StyleSheet, View } from 'react-native'
 import { supabase } from '../../lib/supabase'
 import { Button, Input } from 'react-native-elements'
+import { Text } from 'react-native'
 
 export default function Auth() {
   const [email, setEmail] = useState('')
@@ -36,6 +37,7 @@ export default function Auth() {
 
   return (
     <View style={styles.container}>
+      <Text style = {styles.title}>Login Page</Text>
       <View style={[styles.verticallySpaced]}>
         <Input
           label="Email"
@@ -114,4 +116,10 @@ const styles = StyleSheet.create({
   buttonTitle: {
     fontSize: 18, // Increase button title font size for better readability
   },
+  title: {
+    fontSize: 20,
+    textAlign: 'center',
+    margin: 10,
+    marginTop: 0,
+},
 })

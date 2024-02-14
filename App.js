@@ -5,6 +5,7 @@ import Auth from './src/components/auth-form'
 import { View, Text } from 'react-native'
 import MyStack from './src/navigation/MyStack'
 import { NavigationContainer } from '@react-navigation/native'
+import Login from './src/screens/auth/login'
 
 export default function App() {
   // Successfully logs in
@@ -28,7 +29,7 @@ export default function App() {
         <MyStack />
       ) : (
         <View style={{ flex: 1 }}>
-          <Auth />
+          <Login />
         </View>
       )}
     </NavigationContainer>
