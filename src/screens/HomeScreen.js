@@ -1,17 +1,22 @@
 // HomeScreen.js
 import React from 'react';
-import { Button, View, Text } from 'react-native';
+import { Button, View, Text, ScrollView } from 'react-native';
 import LogoutButton from '../components/logout-button';
+import PostList from '../components/post-list';
+import CreateExercise from '../components/create-exercise';
 
-const HomeScreen = ({ navigation }) => {
+const HomeScreen = ({ navigation, route }) => {
+  
   return (
-    <View>
+    <ScrollView>
       <Button
         title="Go to a profile"
         onPress={() => navigation.navigate('Profile', { name: 'Jane' })}
       />
       <LogoutButton />
-    </View>
+      <CreateExercise />
+      <PostList />
+    </ScrollView>
   );
 };
 
