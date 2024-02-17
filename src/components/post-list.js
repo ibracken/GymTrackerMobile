@@ -3,6 +3,7 @@ import { supabase } from "../../lib/supabase";
 import { useState, useEffect } from 'react';
 import { Button } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
+import CreateExercise from './create-exercise';
 
 
   async function fetchExercises() {
@@ -43,12 +44,15 @@ import { useNavigation } from '@react-navigation/native';
   }
   
   
-  export default function PostList(exercises) {
+  export default function PostList() {
+    console.log("Hello, World!");
     const [Exercises, setExercises] = useState([]);
     const [reps, setReps] = useState([]);
     const [PRs, setPRs] = useState([]);
     const [error, setError] = useState('');
+    const [refreshTrigger, setRefreshTrigger] = useState(0);
 
+    // Fetch exercises on mount and whenever refreshTrigger changes
     useEffect(() => {
       async function fetchExercisesData() {
         try {
@@ -59,9 +63,10 @@ import { useNavigation } from '@react-navigation/native';
           setError("Error fetching exercises");
         }
       }
-    
+
       fetchExercisesData();
-    }, []);
+    }, [refreshTrigger]);
+    // The useEffect occurs when the object change in the Array changes
     
     useEffect(() => {
       async function fetchRepsAndPRs() {
@@ -84,40 +89,46 @@ import { useNavigation } from '@react-navigation/native';
       }
     }, [Exercises]);
 
-      if(error) {
-        return <Text>Error</Text>
-      }
+    // Callback function to trigger a refresh from CreateExercise
+    const handleExerciseCreated = () => {
+      setRefreshTrigger((prev) => prev + 1); // Increment trigger to refresh exercise list
+    };
 
-      return (
-        <ScrollView contentContainerStyle={styles.accountGridContainer}>
-          {Exercises?.map((exercise, exerciseIndex) => (
-            <View key = {exercise.id}>
-              <Text style={styles.accountGridTitle}>Recent {exercise.Exercise} Reps:</Text>
-              <View style = {styles.accountGrid}>
-                {reps[exerciseIndex]?.length > 0 ? (
-                  reps[exerciseIndex].map((rep) => (
-                    <View key={rep.id} style={styles.accountGridItem}>
-                      <Text>Reps: {rep.Rep}, Weight: {rep.Weight}lbs</Text>
-                    </View>
-                  ))
-                ) : (
-                  <Text>None</Text>
-                )}
-              </View>
-              {PRs[exerciseIndex]?.map((rep) => (
-                <View key={rep.id} style={styles.prGridItem}>
-                  <Text>Personal Record: {rep.Weight}lbs</Text>
-                </View>
-              ))}
-              {/* Add Full Reps Page when ready */}
+    if(error) {
+      return <Text>Error</Text>
+    }
 
-
-
+    return (
+      <ScrollView contentContainerStyle={styles.accountGridContainer}>
+        <CreateExercise onExerciseCreated={handleExerciseCreated} />
+        {Exercises?.map((exercise, exerciseIndex) => (
+          <View key = {exercise.id}>
+            <Text style={styles.accountGridTitle}>Recent {exercise.Exercise} Reps:</Text>
+            <View style = {styles.accountGrid}>
+              {reps[exerciseIndex]?.length > 0 ? (
+                reps[exerciseIndex].map((rep) => (
+                  <View key={rep.id} style={styles.accountGridItem}>
+                    <Text>Reps: {rep.Rep}, Weight: {rep.Weight}lbs</Text>
+                  </View>
+                ))
+              ) : (
+                <Text>None</Text>
+              )}
             </View>
-          ))}
-        </ScrollView>
+            {PRs[exerciseIndex]?.map((rep) => (
+              <View key={rep.id} style={styles.prGridItem}>
+                <Text>Personal Record: {rep.Weight}lbs</Text>
+              </View>
+            ))}
+            {/* Add Full Reps Page when ready */}
 
-      );
+
+
+          </View>
+        ))}
+      </ScrollView>
+
+    );
   }
 
 

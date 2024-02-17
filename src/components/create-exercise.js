@@ -3,10 +3,8 @@
 import { useState } from "react";
 import { View, Text, Button, TextInput, StyleSheet } from "react-native";
 import { supabase } from "../../lib/supabase";
-import { useNavigation } from "@react-navigation/native";
 
-export default function CreateExercise() {
-  const navigation = useNavigation();
+export default function CreateExercise({onExerciseCreated}) {
   const [Exercise, setExercise] = useState("");
 
   async function insertExercise() {
@@ -17,19 +15,24 @@ export default function CreateExercise() {
       } = await supabase.auth.getUser();
 
       if (!Exercise) {
-        console.error("Please select an exercise to delete");
+        console.error("Please select an exercise to create");
         return;
       }
 
-      await supabase.from("Exercises").insert({
+      const {data, error} = await supabase.from("Exercises").insert({
         // Inserts these items into supabase, rest of exercise is randomly generated or null
         user_id: user.id,
         Exercise: Exercise,
       });
+      
+      if(error) {
+        console.error("Not Inserted")
+      } else {
+        console.log("created")
+        onExerciseCreated();
+      }
 
       setExercise("");
-    // Navigates back to current screen
-    navigation.navigate('Home', { updated: true });
     } catch (error) {
       console.error(error);
     }

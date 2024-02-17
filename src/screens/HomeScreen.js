@@ -3,7 +3,6 @@ import React from 'react';
 import { Button, View, Text, ScrollView } from 'react-native';
 import LogoutButton from '../components/logout-button';
 import PostList from '../components/post-list';
-import CreateExercise from '../components/create-exercise';
 
 const HomeScreen = ({ navigation, route }) => {
   
@@ -14,7 +13,6 @@ const HomeScreen = ({ navigation, route }) => {
         onPress={() => navigation.navigate('Profile', { name: 'Jane' })}
       />
       <LogoutButton />
-      <CreateExercise />
       <PostList />
     </ScrollView>
   );
