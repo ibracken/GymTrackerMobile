@@ -1,10 +1,8 @@
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { supabase } from "../../lib/supabase";
 import { useState, useEffect } from 'react';
-import { Button } from 'react-native-elements';
-import { useNavigation } from '@react-navigation/native';
 import CreateExercise from './create-exercise';
-
+import DeleteButtonExercise from './delete-button';
 
   async function fetchExercises() {
     const {
@@ -45,7 +43,6 @@ import CreateExercise from './create-exercise';
   
   
   export default function PostList() {
-    console.log("Hello, World!");
     const [Exercises, setExercises] = useState([]);
     const [reps, setReps] = useState([]);
     const [PRs, setPRs] = useState([]);
@@ -95,12 +92,22 @@ import CreateExercise from './create-exercise';
     };
 
     if(error) {
-      return <Text>Error</Text>
+      console.error("Problem Creating Exercises(on callback)")
+    }
+
+    // Callback function to trigger a refresh from Delete Exercises
+    const handleDataDeletion = () => {
+      setRefreshTrigger((prev) => prev + 1); // Increment trigger to refresh exercise list
+    };
+
+    if(error) {
+      console.error("Problem Deleting Exercises(on callback)")
     }
 
     return (
       <ScrollView contentContainerStyle={styles.accountGridContainer}>
         <CreateExercise onExerciseCreated={handleExerciseCreated} />
+        <DeleteButtonExercise onExerciseDeleted={handleDataDeletion} />
         {Exercises?.map((exercise, exerciseIndex) => (
           <View key = {exercise.id}>
             <Text style={styles.accountGridTitle}>Recent {exercise.Exercise} Reps:</Text>
