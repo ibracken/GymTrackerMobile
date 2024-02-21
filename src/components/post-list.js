@@ -2,7 +2,7 @@ import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-nati
 import { supabase } from "../../lib/supabase";
 import { useState, useEffect } from 'react';
 import CreateExercise from './create-exercise';
-import DeleteButtonExercise from './delete-button';
+import DeleteButtonExercise from './delete-exercises-button';
 
   async function fetchExercises() {
     const {

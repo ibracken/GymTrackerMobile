@@ -33,6 +33,7 @@ export default function DeleteButtonExercise({ onExerciseDeleted }) {
           // Item has been deleted, reset the selectedExerciseId to clear the SelectList
           setSelectedExerciseId("");
           setItemDeleted(false); // Reset itemDeleted state to allow for future deletions
+          fetchExercisesData(); // Fetch exercises data to refresh the SelectList
       }
     }, [itemDeleted]); // Depend on itemDeleted to trigger this effect
 
@@ -41,8 +42,8 @@ export default function DeleteButtonExercise({ onExerciseDeleted }) {
             const fetchedExercises = await fetchExercises();
             // Map fetched exercises to the format expected by SelectList
             const mappedExercises = fetchedExercises.map((exercise) => ({
-            value: exercise.Exercise, // Assuming 'id' is the unique identifier
-            key: exercise.id, // Assuming 'Exercise' is the property to display
+            value: exercise.Exercise, //  'Exercise' is the property to display
+            key: exercise.id, //  'id' is the unique identifier 
             }));
             setExercises(mappedExercises);
         } catch (error) {
@@ -124,6 +125,7 @@ export default function DeleteButtonExercise({ onExerciseDeleted }) {
         boxStyles={styles.selectList} // Style the SelectList box
         placeholder = "Select an Exercise"
         onChangeText={setSelectedExerciseId}
+        search={false}
       />
       <TouchableOpacity style={styles.button}  onPress={handleDelete}>
         <Text>Delete Exercise</Text>

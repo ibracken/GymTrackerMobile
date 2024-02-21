@@ -4,6 +4,16 @@ import { supabase } from "../../lib/supabase";
 
 export default function CreateExercise({ onExerciseCreated }) {
   const [Exercise, setExercise] = useState("");
+  const [isFocused, setIsFocused] = useState(false);
+
+  const handleFocus = () => setIsFocused(true);
+  const handleBlur = () => setIsFocused(false);
+
+  const isValid = Exercise.length > 0;
+  const labelStyle = [
+    styles.userLabel,
+    (isFocused || isValid) && styles.labelFocused, // Apply focused styles if input is focused or has a valid value
+  ];
 
   async function insertExercise() {
     try {
@@ -29,7 +39,7 @@ export default function CreateExercise({ onExerciseCreated }) {
           onExerciseCreated();
         }
       }
-
+      // Make the input field empty after the exercise is created
       setExercise("");
     } catch (error) {
       console.error(error);
@@ -38,13 +48,18 @@ export default function CreateExercise({ onExerciseCreated }) {
 
   return (
     <View style={styles.otherGridItem}>
-      <Text>Create Exercises: </Text>
+       <View style={styles.inputGroup}>
       <TextInput
-        style={styles.input}
-        placeholder="Exercise"
-        value={Exercise}
+        required
+        style={[styles.input, (isFocused || isValid) && styles.inputFocused]} // Apply focused styles if input is focused or has a valid value
         onChangeText={setExercise}
+        value={Exercise}
+        onBlur={handleBlur}
+        onFocus={handleFocus}
+        autoCorrect={false}
       />
+      <Text style={labelStyle}>Exercise</Text>
+    </View>
       <TouchableOpacity style={styles.touchableOpacity} onPress={insertExercise}>
         <Text style={styles.touchableOpacityText}>Add Exercise</Text>
       </TouchableOpacity>
@@ -53,10 +68,32 @@ export default function CreateExercise({ onExerciseCreated }) {
 }
 
 const styles = StyleSheet.create({
+  inputGroup: {
+    position: 'relative',
+  },
   input: {
-    fontSize: 18,
-    marginTop: 5,
-    marginBottom: 20, // Add margin to separate input from button
+    borderWidth: 1.5,
+    borderColor: '#9e9e9e',
+    borderRadius: 16,
+    padding: 10,
+    fontSize: 16,
+    color: 'black',
+    backgroundColor: 'transparent',
+  },
+  inputFocused: {
+    borderColor: '#1a73e8',
+  },
+  userLabel: {
+    position: 'absolute',
+    left: 15,
+    color: '#e8e8e8',
+    backgroundColor: 'transparent',
+    top: 15, // Adjust based on your input size and padding
+  },
+  labelFocused: {
+    transform: [{ translateY: -22 }, { scale: 0.8 }], // Adjust based on your needs
+    backgroundColor: 'white',
+    color: '#2196f3',
   },
   touchableOpacity: {
     height: 50,

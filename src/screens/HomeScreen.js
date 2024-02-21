@@ -19,4 +19,5 @@ const HomeScreen = ({ navigation, route }) => {
   );
 };
 
+
 export default HomeScreen;

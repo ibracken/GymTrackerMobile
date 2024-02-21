@@ -2,7 +2,7 @@ import 'react-native-url-polyfill/auto'
 import { useState, useEffect } from 'react'
 import { supabase } from './lib/supabase'
 import Auth from './src/components/auth-form'
-import { View, Text } from 'react-native'
+import { View, Text, StyleSheet } from 'react-native'
 import MyStack from './src/navigation/MyStack'
 import { NavigationContainer } from '@react-navigation/native'
 import Login from './src/screens/auth/login'
@@ -28,10 +28,21 @@ export default function App() {
       {session && session.user ? (
         <MyStack />
       ) : (
-        <View style={{ flex: 1 }}>
+        <View style={[styles.borders, styles.coloring]}>
           <Login />
         </View>
       )}
     </NavigationContainer>
   );
 }
+
+const styles = StyleSheet.create({
+  borders: {
+    position: 'relative',
+    flex: 1,
+  },
+  coloring: {
+    backgroundColor: 'yellow', // Changed from 'green' to 'yellow'
+  },
+
+});
