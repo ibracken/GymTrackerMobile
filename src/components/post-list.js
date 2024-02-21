@@ -112,7 +112,7 @@ import DeleteButtonExercise from './delete-exercises-button';
     return (
       <ScrollView contentContainerStyle={styles.accountGridContainer}>
         <CreateExercise onExerciseCreated={handleExerciseCreated} />
-        <DeleteButtonExercise onExerciseDeleted={handleDataDeletion} />
+        <DeleteButtonExercise onExerciseDeleted={handleDataDeletion} refreshTrigger={refreshTrigger} />
         {Exercises?.map((exercise, exerciseIndex) => (
           <View key = {exercise.id}>
             <Text style={styles.accountGridTitle}>Recent {exercise.Exercise} Reps:</Text>

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { Alert, View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { supabase } from "../../lib/supabase";
 import { SelectList } from 'react-native-dropdown-select-list'
 
@@ -19,7 +19,7 @@ import { SelectList } from 'react-native-dropdown-select-list'
   }
 
 
-export default function DeleteButtonExercise({ onExerciseDeleted }) {
+export default function DeleteButtonExercise({ onExerciseDeleted, refreshTrigger }) {
     const [selectedExerciseId, setSelectedExerciseId] = useState("");
     const [Exercises, setExercises] = useState([]);
     const [itemDeleted, setItemDeleted] = useState(false); // State to track if an item has been deleted
@@ -28,7 +28,7 @@ export default function DeleteButtonExercise({ onExerciseDeleted }) {
     // Fetch exercises data on component mount
     useEffect(() => {
         fetchExercisesData();
-    }, []);
+    }, [refreshTrigger]);
 
     // Update the SelectList when the exercises data changes
     useEffect(() => {
@@ -69,7 +69,8 @@ export default function DeleteButtonExercise({ onExerciseDeleted }) {
         try {
           // Check if a exercise is selected
           if (!selectedExerciseId) {
-            console.error("Please select an exercise to delete");
+            // Replace with popup error here!!!
+            Alert.alert("Please select an exercise to delete");
             return;
           }
 
