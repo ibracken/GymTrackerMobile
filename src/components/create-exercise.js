@@ -5,14 +5,16 @@ import { supabase } from "../../lib/supabase";
 export default function CreateExercise({ onExerciseCreated }) {
   const [Exercise, setExercise] = useState("");
   const [isFocused, setIsFocused] = useState(false);
-
+  // For the input label animation
   const handleFocus = () => setIsFocused(true);
   const handleBlur = () => setIsFocused(false);
 
+  // Check if the input is focused or has a valid value
   const isValid = Exercise.length > 0;
+  // Apply focused styles if input is focused or has a valid value
   const labelStyle = [
     styles.userLabel,
-    (isFocused || isValid) && styles.labelFocused, // Apply focused styles if input is focused or has a valid value
+    (isFocused || isValid) && styles.labelFocused,
   ];
 
   async function insertExercise() {
@@ -26,7 +28,7 @@ export default function CreateExercise({ onExerciseCreated }) {
         return;
       }
 
-      const { data, error } = await supabase.from("Exercises").insert({
+      const { error } = await supabase.from("Exercises").insert({
         user_id: user.id,
         Exercise: Exercise,
       });
@@ -35,6 +37,7 @@ export default function CreateExercise({ onExerciseCreated }) {
         console.error("Not Inserted");
       } else {
         console.log("Created");
+        // If a callback function is passed, call it after the exercise is created
         if (onExerciseCreated) {
           onExerciseCreated();
         }

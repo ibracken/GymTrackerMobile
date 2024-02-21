@@ -3,6 +3,8 @@ import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { supabase } from "../../lib/supabase";
 import { SelectList } from 'react-native-dropdown-select-list'
 
+
+// Fetch exercises from the database
     async function fetchExercises() {
     const {
       data: { user },
@@ -23,11 +25,12 @@ export default function DeleteButtonExercise({ onExerciseDeleted }) {
     const [itemDeleted, setItemDeleted] = useState(false); // State to track if an item has been deleted
     const [showWarning, setShowWarning] = useState(false); // State showing/hiding the warning modal
     
+    // Fetch exercises data on component mount
     useEffect(() => {
-        fetchExercisesData(); // Fetch exercises data on component mount
+        fetchExercisesData();
     }, []);
 
-
+    // Update the SelectList when the exercises data changes
     useEffect(() => {
       if (itemDeleted) {
           // Item has been deleted, reset the selectedExerciseId to clear the SelectList
@@ -35,21 +38,21 @@ export default function DeleteButtonExercise({ onExerciseDeleted }) {
           setItemDeleted(false); // Reset itemDeleted state to allow for future deletions
           fetchExercisesData(); // Fetch exercises data to refresh the SelectList
       }
-    }, [itemDeleted]); // Depend on itemDeleted to trigger this effect
+    }, [itemDeleted]);
+
 
     async function fetchExercisesData() {
-        try {
-            const fetchedExercises = await fetchExercises();
-            // Map fetched exercises to the format expected by SelectList
-            const mappedExercises = fetchedExercises.map((exercise) => ({
-            value: exercise.Exercise, //  'Exercise' is the property to display
-            key: exercise.id, //  'id' is the unique identifier 
-            }));
-            setExercises(mappedExercises);
-        } catch (error) {
-            console.error("Error fetching exercises:", error);
-            setError("Error fetching exercises");
-        }
+      try {
+          const fetchedExercises = await fetchExercises();
+          // Map fetched exercises to the format expected by SelectList
+          const mappedExercises = fetchedExercises.map((exercise) => ({
+          value: exercise.Exercise, //  'Exercise' is the property to display
+          key: exercise.id, //  'id' is the unique identifier 
+          }));
+          setExercises(mappedExercises);
+      } catch (error) {
+          console.error("Error fetching exercises:", error);
+      }
     }
 
     const handleShow = () => {
@@ -70,49 +73,31 @@ export default function DeleteButtonExercise({ onExerciseDeleted }) {
             return;
           }
 
-          // Fetch the Reps to get related information (foreign key relationships)
-      const { data: exerciseData, error: exerciseError } = await supabase
-      .from("Reps")
-      .select("*")
-      .eq("Exercise_id", selectedExerciseId);
+          // Delete Reps associated with the selected exercise from Supabase
+          await supabase.from("Reps").delete().eq("Exercise_id", selectedExerciseId);
 
-      // Error Checking
-      if (exerciseError) {
-        console.error("Error fetching exercise data:", exerciseError);
-        return;
-      }
+        
+          // Delete the selected exercise from Supabase
+          const {error} = await supabase.from("Exercises").delete().eq("id", selectedExerciseId);
 
-      // Delete Reps first
-      await supabase.from("Reps").delete().eq("Exercise_id", selectedExerciseId);
+          if (error) {
+            console.error("Not Deleted");
+          } else {
+            console.log("Deleted");
+            // If a callback function is provided, call it after the exercise is deleted
+            if (onExerciseDeleted) {
+              onExerciseDeleted();
+            }
+            setItemDeleted(true); // Indicate that an item has been deleted
+          }
+          // Clear the selected exercise after deletion
+          setSelectedExerciseId("");
+          // Close the warning modal(when ready to implement the modal)
+          handleClose();
 
-    
-      // Delete the selected exercise from Supabase
-      const {error} = await supabase.from("Exercises").delete().eq("id", selectedExerciseId);
-
-      if (error) {
-        console.error("Not Deleted");
-      } else {
-        console.log("Deleted");
-        if (onExerciseDeleted) {
-          onExerciseDeleted();
+        } catch (error) {
+          console.error("Error deleting exercise:", error);
         }
-        setItemDeleted(true); // Indicate that an item has been deleted
-      }
-
-
-      // Clear the selected exercise after deletion
-      setSelectedExerciseId("");
-
-
-// Refresh
-
-
-
-      handleClose();
-
-    } catch (error) {
-      console.error("Error deleting exercise:", error);
-    }
   };
 
   // Render Function

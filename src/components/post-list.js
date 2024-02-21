@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import CreateExercise from './create-exercise';
 import DeleteButtonExercise from './delete-exercises-button';
 
+// Fetch exercises from the database
   async function fetchExercises() {
     const {
       data: { user },
@@ -17,6 +18,8 @@ import DeleteButtonExercise from './delete-exercises-button';
     return data;
   }
   
+
+  // Fetch reps from the database
   async function fetchReps(Exercise_id) {
   
     const { data } = await supabase
@@ -29,6 +32,8 @@ import DeleteButtonExercise from './delete-exercises-button';
     return data;
   }
   
+
+  // Fetch the personal record (PR) from the database
   async function fetchPR(Exercise_id) {
   
     const { data } = await supabase
@@ -63,8 +68,8 @@ import DeleteButtonExercise from './delete-exercises-button';
 
       fetchExercisesData();
     }, [refreshTrigger]);
-    // The useEffect occurs when the object change in the Array changes
     
+    // Fetch reps and PRs for each exercise after exercises are fetched
     useEffect(() => {
       async function fetchRepsAndPRs() {
         try {
