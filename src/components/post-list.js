@@ -3,6 +3,8 @@ import { supabase } from "../../lib/supabase";
 import { useState, useEffect } from 'react';
 import CreateExercise from './create-exercise';
 import DeleteButtonExercise from './delete-exercises-button';
+import CreateRep from './create-rep';
+
 
 // Fetch exercises from the database
   async function fetchExercises() {
@@ -99,6 +101,14 @@ import DeleteButtonExercise from './delete-exercises-button';
     if(error) {
       console.error("Problem Creating Exercises(on callback)")
     }
+    
+    const handleRepCreated = () => {
+      setRefreshTrigger((prev) => prev + 1); // Increment trigger to refresh exercise list
+    };
+
+    if(error) {
+      console.error("Problem Creating Rep(on callback)")
+    }
 
     // Callback function to trigger a refresh from Delete Exercises
     const handleDataDeletion = () => {
@@ -112,7 +122,9 @@ import DeleteButtonExercise from './delete-exercises-button';
     return (
       <ScrollView contentContainerStyle={styles.accountGridContainer}>
         <CreateExercise onExerciseCreated={handleExerciseCreated} />
+        <CreateRep onRepCreated={handleRepCreated} refreshTrigger={refreshTrigger} />
         <DeleteButtonExercise onExerciseDeleted={handleDataDeletion} refreshTrigger={refreshTrigger} />
+        <Text style={styles.accountGridTitle}>Exercises:</Text>
         {Exercises?.map((exercise, exerciseIndex) => (
           <View key = {exercise.id}>
             <Text style={styles.accountGridTitle}>Recent {exercise.Exercise} Reps:</Text>
@@ -159,22 +171,22 @@ import DeleteButtonExercise from './delete-exercises-button';
       padding: 0,
     },
     accountGridItem: {
-      backgroundColor: '#777', // Simplified for React Native
       padding: 16,
       borderRadius: 8,
       marginBottom: 20,
     },
+    
     prGridItem: {
-      backgroundColor: '#777', // Simplified for React Native
       padding: 16,
       borderRadius: 8,
       boxShadow: '0 0 5px rgba(0, 0, 0, 0.1)',
+      alignItems: 'center',
     },
     accountGridTitle: {
       fontSize: 24,
       marginBottom: 16,
       textAlign: 'center',
-      backgroundColor: '#777', // Simplified for React Native
+      backgroundColor: 'darkturquoise',
       padding: 8,
       borderRadius: 8,
     },

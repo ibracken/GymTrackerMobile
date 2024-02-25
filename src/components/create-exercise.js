@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { View, Text, TouchableOpacity, TextInput, StyleSheet } from "react-native";
+import { View, Text, TouchableOpacity, Alert, TextInput, StyleSheet } from "react-native";
 import { supabase } from "../../lib/supabase";
 
 export default function CreateExercise({ onExerciseCreated }) {
@@ -24,7 +24,7 @@ export default function CreateExercise({ onExerciseCreated }) {
       } = await supabase.auth.getUser();
 
       if (!Exercise) {
-        console.error("Please choose an exercise to create");
+        Alert.alert("Please choose an exercise to create");
         return;
       }
 
@@ -50,19 +50,19 @@ export default function CreateExercise({ onExerciseCreated }) {
   }
 
   return (
-    <View style={styles.otherGridItem}>
+    <View style={styles.container}>
        <View style={styles.inputGroup}>
-      <TextInput
-        required
-        style={[styles.input, (isFocused || isValid) && styles.inputFocused]} // Apply focused styles if input is focused or has a valid value
-        onChangeText={setExercise}
-        value={Exercise}
-        onBlur={handleBlur}
-        onFocus={handleFocus}
-        autoCorrect={false}
-      />
-      <Text style={labelStyle}>Exercise</Text>
-    </View>
+        <TextInput
+          required
+          style={[styles.input, (isFocused || isValid) && styles.inputFocused]} // Apply focused styles if input is focused or has a valid value
+          onChangeText={setExercise}
+          value={Exercise}
+          onBlur={handleBlur}
+          onFocus={handleFocus}
+          autoCorrect={false}
+        />
+        <Text style={labelStyle}>Exercise</Text>
+      </View>
       <TouchableOpacity style={styles.touchableOpacity} onPress={insertExercise}>
         <Text style={styles.touchableOpacityText}>Add Exercise</Text>
       </TouchableOpacity>
@@ -71,6 +71,17 @@ export default function CreateExercise({ onExerciseCreated }) {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    padding: 16,
+    borderRadius: 8,
+    elevation: 1,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    marginBottom: 20,
+    backgroundColor: '#fff',
+  },
   inputGroup: {
     position: 'relative',
   },
@@ -108,16 +119,5 @@ const styles = StyleSheet.create({
   touchableOpacityText: {
     color: '#fff', // Text color
     fontSize: 16, // Text size
-  },
-  otherGridItem: {
-    padding: 16,
-    borderRadius: 8,
-    elevation: 1,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-    marginBottom: 20,
-    backgroundColor: '#fff',
   },
 });

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Alert, View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { supabase } from "../../lib/supabase";
 import { SelectList } from 'react-native-dropdown-select-list'
-
+import WarningPopup from './warning-popup';
 
 // Fetch exercises from the database
     async function fetchExercises() {
@@ -56,10 +56,15 @@ export default function DeleteButtonExercise({ onExerciseDeleted, refreshTrigger
     }
 
     const handleShow = () => {
-        if(selectedExerciseId) {
+      if (!selectedExerciseId) {
+          // If no exercise is selected, show an alert instead of the modal
+          Alert.alert("Please select an exercise to delete");
+      } else {
+          // If an exercise is selected, show the warning modal
           setShowWarning(true);
-        }
-      };
+      }
+  };
+  
     
       const handleClose = () => {
         setShowWarning(false);
@@ -67,13 +72,6 @@ export default function DeleteButtonExercise({ onExerciseDeleted, refreshTrigger
 
       const handleDelete = async () => {
         try {
-          // Check if a exercise is selected
-          if (!selectedExerciseId) {
-            // Replace with popup error here!!!
-            Alert.alert("Please select an exercise to delete");
-            return;
-          }
-
           // Delete Reps associated with the selected exercise from Supabase
           await supabase.from("Reps").delete().eq("Exercise_id", selectedExerciseId);
 
@@ -113,9 +111,14 @@ export default function DeleteButtonExercise({ onExerciseDeleted, refreshTrigger
         onChangeText={setSelectedExerciseId}
         search={false}
       />
-      <TouchableOpacity style={styles.button}  onPress={handleDelete}>
-        <Text>Delete Exercise</Text>
+      <TouchableOpacity style={styles.button}  onPress={handleShow}>
+        <Text style={styles.buttonText}>Delete Exercise</Text>
       </TouchableOpacity>
+      <WarningPopup
+        show={showWarning}
+        handleClose={handleClose}
+        handleDelete={handleDelete}
+      />
     </View>
   );
 }
@@ -130,7 +133,6 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     marginBottom: 20,
     elevation: 1, // for Android shadow
-    backgroundColor: '#777', // Adjusted for React Native
   },
   button: {
     marginTop: 10,
@@ -138,6 +140,9 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 5,
     alignItems: 'center',
+  },
+  buttonText: {
+    color: 'white',
   },
   selectList: { // Optional styling for SelectList
     borderRadius: 5,
