@@ -102,7 +102,7 @@ export default function DeleteButtonExercise({ onExerciseDeleted, refreshTrigger
   // Render Function
   return (
     <View style={styles.otherGridItem}>
-      <Text>Select Exercise to Delete: </Text>
+      <Text style={styles.title}>Select Exercise to Delete: </Text>
       <SelectList 
         setSelected={setSelectedExerciseId} // Correctly bind setSelected to the ID
         data={Exercises} // Pass the correctly formatted exercises data
@@ -127,10 +127,6 @@ export default function DeleteButtonExercise({ onExerciseDeleted, refreshTrigger
 const styles = StyleSheet.create({
   otherGridItem: {
     padding: 16,
-    borderRadius: 8,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
     marginBottom: 20,
     elevation: 1, // for Android shadow
   },
@@ -146,8 +142,12 @@ const styles = StyleSheet.create({
   },
   selectList: { // Optional styling for SelectList
     borderRadius: 5,
-    borderColor: '#ccc',
     borderWidth: 1,
     paddingHorizontal: 10,
+  },
+  title: {
+    fontSize: 18,
+    textAlign: 'center',
+    marginBottom: 20,
   },
 });

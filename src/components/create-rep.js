@@ -36,14 +36,14 @@ export default function CreateRep({ onRepCreated, refreshTrigger }) {
   const isValidWeight = Weight.length > 0;
   // Apply focused styles if input is focused or has a valid value
   const labelStyleWeight = [
-    styles.userLabel,
+    styles.repLabel,
     (isFocusedWeight || isValidWeight) && styles.labelFocused,
   ];
 
   const isValidReps = Reps.length > 0;
   // Apply focused styles if input is focused or has a valid value
   const labelStyleReps = [
-    styles.userLabel,
+    styles.repLabel,
     (isFocusedReps || isValidReps) && styles.labelFocused,
   ];
 
@@ -168,9 +168,10 @@ const styles = StyleSheet.create({
   inputFocused: {
     borderColor: '#1a73e8',
   },
-  userLabel: {
+  repLabel: {
     position: 'absolute',
     left: 15,
+    color: 'lightslategrey',
     backgroundColor: 'transparent',
     top: 15, // Adjust based on your input size and padding
   },

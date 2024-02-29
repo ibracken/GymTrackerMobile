@@ -1,9 +1,11 @@
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { supabase } from "../../lib/supabase";
 import { useState, useEffect } from 'react';
+import { useNavigation } from '@react-navigation/native';
 import CreateExercise from './create-exercise';
 import DeleteButtonExercise from './delete-exercises-button';
 import CreateRep from './create-rep';
+import LogoutButton from '../components/logout-button';
 
 
 // Fetch exercises from the database
@@ -55,6 +57,7 @@ import CreateRep from './create-rep';
     const [PRs, setPRs] = useState([]);
     const [error, setError] = useState('');
     const [refreshTrigger, setRefreshTrigger] = useState(0);
+    const navigation = useNavigation();
 
     // Fetch exercises on mount and whenever refreshTrigger changes
     useEffect(() => {
@@ -121,13 +124,26 @@ import CreateRep from './create-rep';
 
     return (
       <ScrollView contentContainerStyle={styles.accountGridContainer}>
+        <View style={styles.logoutContainer}>
+          <LogoutButton />
+        </View>
         <CreateExercise onExerciseCreated={handleExerciseCreated} />
         <CreateRep onRepCreated={handleRepCreated} refreshTrigger={refreshTrigger} />
         <DeleteButtonExercise onExerciseDeleted={handleDataDeletion} refreshTrigger={refreshTrigger} />
-        <Text style={styles.accountGridTitle}>Exercises:</Text>
+        <Text style={styles.yourTitle}>Your Exercises:</Text>
         {Exercises?.map((exercise, exerciseIndex) => (
           <View key = {exercise.id}>
             <Text style={styles.accountGridTitle}>Recent {exercise.Exercise} Reps:</Text>
+            {/* Button to Fullreps goes here */}
+
+            
+            <TouchableOpacity
+              style={styles.fullRepsButton}
+              onPress={() => navigation.navigate('FullReps', {exercise})}
+            >
+              <Text>Full Reps</Text>
+            </TouchableOpacity>
+              
             <View style = {styles.accountGrid}>
               {reps[exerciseIndex]?.length > 0 ? (
                 reps[exerciseIndex].map((rep) => (
@@ -144,12 +160,10 @@ import CreateRep from './create-rep';
                 <Text>Personal Record: {rep.Weight}lbs</Text>
               </View>
             ))}
-            {/* Add Full Reps Page when ready */}
-
-
-
           </View>
         ))}
+        <View style={styles.padding}>
+        </View>
       </ScrollView>
 
     );
@@ -162,6 +176,7 @@ import CreateRep from './create-rep';
       flex: 1,
       justifyContent: 'center',
       width: '100%',
+      
     },
     accountGrid: {
       flexDirection: 'row',
@@ -176,25 +191,45 @@ import CreateRep from './create-rep';
       marginBottom: 20,
     },
     
-    prGridItem: {
-      padding: 16,
-      borderRadius: 8,
-      boxShadow: '0 0 5px rgba(0, 0, 0, 0.1)',
-      alignItems: 'center',
-    },
     accountGridTitle: {
-      fontSize: 24,
+      fontSize: 16,
       marginBottom: 16,
       textAlign: 'center',
       backgroundColor: 'darkturquoise',
       padding: 8,
       borderRadius: 8,
     },
+    fullRepsButton: {
+      marginTop: 10,
+      backgroundColor: '#007bff',
+      padding: 10,
+      borderRadius: 5,
+      alignItems: 'center',
+    },
     link: {
       padding: 16,
       marginTop: 16,
     },
+    logoutContainer: {
+      width: '100%',
+      alignItems: 'flex-end', // Align the logout button to the right
+      padding: 20,
+    },
+    padding: {
+      padding: 75,
+    }, 
+    prGridItem: {
+      padding: 16,
+      borderRadius: 8,
+      boxShadow: '0 0 5px rgba(0, 0, 0, 0.1)',
+      alignItems: 'center',
+    },
     ul: {
       marginBottom: 20,
+    },
+    yourTitle: {
+      fontSize: 24,
+      marginBottom: 16,
+      textAlign: 'center',
     },
   });

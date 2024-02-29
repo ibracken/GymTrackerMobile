@@ -13,7 +13,7 @@ export default function CreateExercise({ onExerciseCreated }) {
   const isValid = Exercise.length > 0;
   // Apply focused styles if input is focused or has a valid value
   const labelStyle = [
-    styles.userLabel,
+    styles.exerciseLabel,
     (isFocused || isValid) && styles.labelFocused,
   ];
 
@@ -51,6 +51,7 @@ export default function CreateExercise({ onExerciseCreated }) {
 
   return (
     <View style={styles.container}>
+      <Text style={styles.title}>Add an exercise:</Text>
        <View style={styles.inputGroup}>
         <TextInput
           required
@@ -63,7 +64,7 @@ export default function CreateExercise({ onExerciseCreated }) {
         />
         <Text style={labelStyle}>Exercise</Text>
       </View>
-      <TouchableOpacity style={styles.touchableOpacity} onPress={insertExercise}>
+      <TouchableOpacity style={styles.button} onPress={insertExercise}>
         <Text style={styles.touchableOpacityText}>Add Exercise</Text>
       </TouchableOpacity>
     </View>
@@ -72,7 +73,7 @@ export default function CreateExercise({ onExerciseCreated }) {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 16,
+    paddingHorizontal: 16,
     borderRadius: 8,
     elevation: 1,
     shadowColor: '#000',
@@ -80,7 +81,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 5,
     marginBottom: 20,
-    backgroundColor: '#fff',
   },
   inputGroup: {
     position: 'relative',
@@ -97,10 +97,10 @@ const styles = StyleSheet.create({
   inputFocused: {
     borderColor: '#1a73e8',
   },
-  userLabel: {
+  exerciseLabel: {
     position: 'absolute',
     left: 15,
-    color: '#e8e8e8',
+    color: 'lightslategrey',
     backgroundColor: 'transparent',
     top: 15, // Adjust based on your input size and padding
   },
@@ -109,15 +109,19 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     color: '#2196f3',
   },
-  touchableOpacity: {
-    height: 50,
+  button: {
+    marginTop: 10,
     backgroundColor: '#007bff',
-    borderRadius: 10,
-    justifyContent: 'center', // Center the text vertically
-    alignItems: 'center', // Center the text horizontally
+    padding: 10,
+    borderRadius: 5,
+    alignItems: 'center',
+  },
+  title: {
+    fontSize: 18,
+    textAlign: 'center',
+    marginBottom: 20,
   },
   touchableOpacityText: {
-    color: '#fff', // Text color
-    fontSize: 16, // Text size
+    color: 'white',
   },
 });
