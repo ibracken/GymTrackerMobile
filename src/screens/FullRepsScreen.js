@@ -1,6 +1,6 @@
 // FullRepsScreen.js
 import React from 'react';
-import { View, Text, ScrollView } from 'react-native';
+import { View, Text, ScrollView, StyleSheet } from 'react-native';
 import { supabase } from '../../lib/supabase';
 import { useState, useEffect } from 'react';
 
@@ -31,18 +31,57 @@ const FullRepsScreen = ({ route }) => {
   }, [exercise]);
   
   return (
-    <ScrollView>
-      <View>
+    <ScrollView contentContainerStyle={styles.repGridContainer}>  
+      <View style = {styles.container}>
         {/* Display exercise details */}
-        <Text>Exercise Name: {exercise.name}</Text>
-        <Text>All Reps:</Text>
-        {reps.map((rep, index) => (
-          // Might want to double check on the rep values
-          <Text key={index}>{rep.Rep} reps of {rep.Weight} weight at {new Date(rep.created_at).toLocaleString()}</Text>
-        ))}
+        <Text style = {styles.yourTitle}>Exercise Name: {exercise.Exercise}</Text>
+        <Text style = {styles.yourTitle}>Full Reps List:</Text>
+        <View style = {styles.repGrid}>
+          {reps.map((rep, index) => (
+            <View key={index} style = {styles.repGridItem}>
+              <Text key={index}>
+                {rep.Rep === 1 
+                  ? `1 rep of ${rep.Weight} lbs at ${new Date(rep.created_at).toLocaleString()}`
+                  : `${rep.Rep} reps of ${rep.Weight} lbs at ${new Date(rep.created_at).toLocaleString()}`}
+              </Text>
+            </View>
+          ))}
+        </View>
       </View>
     </ScrollView>
   )
 };
 
+
+const styles = StyleSheet.create({
+  container: {
+    padding: 16,
+    borderRadius: 8,
+    elevation: 1,
+    marginBottom: 20,
+  },
+  repGridContainer: {
+    flex: 1,
+    width: '100%',
+    padding: 16,
+    backgroundColor: '#fff',
+  },
+  repGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    gap: 16,
+    padding: 0,
+  },
+  repGridItem: {
+    padding: 16,
+    borderRadius: 8,
+    marginBottom: 20,
+  },
+  yourTitle: {
+    fontSize: 24,
+    marginBottom: 16,
+    textAlign: 'center',
+  },
+})
 export default FullRepsScreen;

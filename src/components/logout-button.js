@@ -63,10 +63,6 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
         backgroundColor: 'rgb(255, 65, 65)',
         flexDirection: 'row',
-        shadowOffset: { width: 2, height: 2 },
-        shadowOpacity: 0.2,
-        shadowRadius: 10,
-        elevation: 2, // for Android shadow
       },
       touchable: {
         flexDirection: 'row',

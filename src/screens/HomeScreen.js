@@ -7,7 +7,7 @@ import { supabase } from '../../lib/supabase';
 const HomeScreen = ({ navigation, route }) => {
   
   return (
-    <ScrollView>
+    <ScrollView style = {{backgroundColor: '#fff'}}>
       <PostList />
     </ScrollView>
   );

@@ -86,7 +86,6 @@ import LogoutButton from '../components/logout-button';
           const PRResults = await Promise.all(PRPromises);
           setPRs(PRResults);
         } catch (error) {
-          console.error("Error fetching reps or PRs:", error);
           setError("Error fetching reps or PRs");
         }
       }
@@ -132,18 +131,8 @@ import LogoutButton from '../components/logout-button';
         <DeleteButtonExercise onExerciseDeleted={handleDataDeletion} refreshTrigger={refreshTrigger} />
         <Text style={styles.yourTitle}>Your Exercises:</Text>
         {Exercises?.map((exercise, exerciseIndex) => (
-          <View key = {exercise.id}>
-            <Text style={styles.accountGridTitle}>Recent {exercise.Exercise} Reps:</Text>
-            {/* Button to Fullreps goes here */}
-
-            
-            <TouchableOpacity
-              style={styles.fullRepsButton}
-              onPress={() => navigation.navigate('FullReps', {exercise})}
-            >
-              <Text>Full Reps</Text>
-            </TouchableOpacity>
-              
+          <View style = {styles.container} key = {exercise.id}>
+            <Text style={styles.yourTitle}>Recent {exercise.Exercise} Reps:</Text>
             <View style = {styles.accountGrid}>
               {reps[exerciseIndex]?.length > 0 ? (
                 reps[exerciseIndex].map((rep) => (
@@ -152,7 +141,7 @@ import LogoutButton from '../components/logout-button';
                   </View>
                 ))
               ) : (
-                <Text>None</Text>
+                <Text>No Reps Yet!</Text>
               )}
             </View>
             {PRs[exerciseIndex]?.map((rep) => (
@@ -160,6 +149,12 @@ import LogoutButton from '../components/logout-button';
                 <Text>Personal Record: {rep.Weight}lbs</Text>
               </View>
             ))}
+            <TouchableOpacity
+              style={styles.fullRepsButton}
+              onPress={() => navigation.navigate('FullReps', {exercise})}
+            >
+              <Text style = {styles.buttonText}>Full {exercise.Exercise} Reps</Text>
+            </TouchableOpacity>
           </View>
         ))}
         <View style={styles.padding}>
@@ -176,7 +171,7 @@ import LogoutButton from '../components/logout-button';
       flex: 1,
       justifyContent: 'center',
       width: '100%',
-      
+      padding: 16,
     },
     accountGrid: {
       flexDirection: 'row',
@@ -191,13 +186,11 @@ import LogoutButton from '../components/logout-button';
       marginBottom: 20,
     },
     
-    accountGridTitle: {
-      fontSize: 16,
-      marginBottom: 16,
-      textAlign: 'center',
-      backgroundColor: 'darkturquoise',
-      padding: 8,
+    container: {
+      padding: 16,
       borderRadius: 8,
+      elevation: 1,
+      marginBottom: 20,
     },
     fullRepsButton: {
       marginTop: 10,
@@ -205,6 +198,9 @@ import LogoutButton from '../components/logout-button';
       padding: 10,
       borderRadius: 5,
       alignItems: 'center',
+    },
+    buttonText: {
+      color: 'white',
     },
     link: {
       padding: 16,
