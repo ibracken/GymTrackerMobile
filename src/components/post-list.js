@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Share } from 'react-native';
 import { supabase } from "../../lib/supabase";
 import { useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
@@ -21,6 +21,24 @@ import LogoutButton from '../components/logout-button';
   
     return data;
   }
+
+  async function shareButton(){
+    const shareOptions = {
+      // TODO add a link to the app when ready
+      message: 'This is a message',
+    }
+
+    try {
+      const result = await Share.share(shareOptions);
+      if (result.action === Share.sharedAction) {
+        console.log('Share was successful');
+      } else if (result.action === Share.dismissedAction) {
+        console.log('Share was dismissed');
+      }
+    } catch(error) {
+      console.log('Error =>', error);
+    }
+  };
   
 
   // Fetch reps from the database
@@ -95,7 +113,10 @@ import LogoutButton from '../components/logout-button';
       }
     }, [Exercises]);
 
-    // Callback function to trigger a refresh from CreateExercise
+
+
+    
+    // Callback functions to trigger refreshes
     const handleExerciseCreated = () => {
       setRefreshTrigger((prev) => prev + 1); // Increment trigger to refresh exercise list
     };
@@ -121,10 +142,15 @@ import LogoutButton from '../components/logout-button';
       console.error("Problem Deleting Exercises(on callback)")
     }
 
+
+
     return (
       <ScrollView contentContainerStyle={styles.accountGridContainer}>
-        <View style={styles.logoutContainer}>
-          <LogoutButton />
+        <View style={styles.topContainer}>
+          <LogoutButton style = {styles.logoutButton}/>
+          <TouchableOpacity style={styles.shareButton} onPress={shareButton}>
+          <Text style = {styles.buttonText}>Share</Text>
+        </TouchableOpacity>
         </View>
         <CreateExercise onExerciseCreated={handleExerciseCreated} />
         <CreateRep onRepCreated={handleRepCreated} refreshTrigger={refreshTrigger} />
@@ -171,7 +197,6 @@ import LogoutButton from '../components/logout-button';
       flex: 1,
       justifyContent: 'center',
       width: '100%',
-      padding: 16,
     },
     accountGrid: {
       flexDirection: 'row',
@@ -206,10 +231,12 @@ import LogoutButton from '../components/logout-button';
       padding: 16,
       marginTop: 16,
     },
-    logoutContainer: {
-      width: '100%',
-      alignItems: 'flex-end', // Align the logout button to the right
-      padding: 20,
+    shareButton: {
+      marginTop: 10,
+      backgroundColor: '#007bff',
+      padding: 10,
+      borderRadius: 5,
+      alignItems: 'center',
     },
     padding: {
       padding: 75,
@@ -222,6 +249,12 @@ import LogoutButton from '../components/logout-button';
     },
     ul: {
       marginBottom: 20,
+    },
+    topContainer: {
+      width: '100%',
+      flexDirection: 'row',
+      justifyContent: 'space-between', // This ensures the buttons are pushed to each side
+      padding: 20,
     },
     yourTitle: {
       fontSize: 24,

@@ -41,8 +41,5 @@ const styles = StyleSheet.create({
     position: 'relative',
     flex: 1,
   },
-  coloring: {
-    backgroundColor: 'yellow', // Changed from 'green' to 'yellow'
-  },
 
 });
